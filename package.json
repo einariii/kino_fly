@@ -1,0 +1,21 @@
+{
+  "name": "kino_fly",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build:css": "tailwind build ./lib/assets/input.css -o ./lib/assets/output.css --minify",
+    "build:js": "esbuild ./lib/assets/input.js --bundle --outfile=./lib/assets/output.js --minify",
+    "build": "npm run build:css && npm run build:js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "esbuild": "^0.18.2",
+    "tailwindcss": "^3.3.2"
+  },
+  "dependencies": {
+    "alpinejs": "^3.12.2"
+  }
+}
