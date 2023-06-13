@@ -13,6 +13,7 @@ defmodule KinoFly.MixProject do
 
   def application do
     [
+      mod: {KinoFly.Application, []},
       extra_applications: [:logger]
     ]
   end
