@@ -11,12 +11,12 @@ defmodule KinoFly do
 
   @impl true
   def handle_connect(ctx) do
-    {:ok, %{fields: ctx.assigns.fields}, ctx}
+    {:ok, %{}, ctx}
   end
 
   @impl true
-  def to_attrs(ctx) do
-    ctx.assigns.fields
+  def to_attrs(_ctx) do
+    %{}
   end
 
   @impl true
