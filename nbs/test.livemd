@@ -1,10 +1,12 @@
 # test
 
 ```elixir
-Mix.install([{:kino_fly, path: "."}])
+Mix.install([{:kino_fly, path: "/kino_fly"}])
 ```
 
 ## Section
+
+<!-- livebook:{"attrs":{},"chunks":null,"kind":"Elixir.KinoFly","livebook_object":"smart_cell"} -->
 
 ```elixir
 
