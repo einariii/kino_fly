@@ -6,7 +6,7 @@ defmodule KinoFly do
 
   @impl true
   def init(_attrs, ctx) do
-    {:ok, %{}, ctx}
+    {:ok, ctx}
   end
 
   @impl true
