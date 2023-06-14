@@ -6,6 +6,12 @@ Mix.install([{:kino_fly, path: "."}])
 
 ## Section
 
+<!-- livebook:{"attrs":{},"chunks":null,"kind":"Elixir.KinoFly","livebook_object":"smart_cell"} -->
+
+```elixir
+IO.puts("No source code for this cell.")
+```
+
 ```elixir
 
 ```
