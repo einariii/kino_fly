@@ -1,7 +1,7 @@
 # test
 
 ```elixir
-Mix.install([{:kino_fly, path: "/kino_fly"}])
+Mix.install([{:kino_fly, path: "."}])
 ```
 
 ## Section
