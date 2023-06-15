@@ -116,7 +116,14 @@ defmodule KinoFly.Client do
       "Content-Type" => "application/json"
     }
 
-    Req.get("#{hostname}/v1/apps/#{app}/machines/#{machine}", headers: headers)
+    {:ok, response} = Req.get("#{hostname}/v1/apps/#{app}/machines/#{machine}", headers: headers)
+
+    # id = response.body["id"]
+    name = response.body["name"]
+    image = response.body["config"]["image"]
+    region = response.body["region"]
+
+    %{id: machine, name: name, image: image, region: region}
   end
 
   def update_machine() do

@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 
-.refreshbutton {
+.btn {
     @apply font-bold py-2 px-4 rounded;
 }
 
@@ -13,6 +13,6 @@
     font-size: 0.875rem;
     border: 2px solid black;
     border-radius: 0.5rem;
-    color: white;
-    min-width: 130px;
+    min-width: 100px;
+    color: black;
 }

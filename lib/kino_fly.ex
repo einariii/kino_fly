@@ -38,7 +38,14 @@ defmodule KinoFly do
         {:error, _} -> []
       end
 
-    broadcast_event(ctx, "refresh", machines)
+    result =
+      Enum.map(machines, fn x ->
+        Client.get_machine_details(token, application, x)
+      end)
+
+    # IO.inspect(result, label: "RESULT")
+
+    broadcast_event(ctx, "refresh", result)
     {:noreply, ctx}
   end
 
