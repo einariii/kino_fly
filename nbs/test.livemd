@@ -11,3 +11,27 @@ Mix.install([{:kino_fly, path: "/kino_fly"}])
 ```elixir
 IO.puts("No source code for this cell.")
 ```
+
+```elixir
+{:ok, response} =
+  {:ok,
+   %Req.Response{
+     status: 401,
+     headers: [
+       {"content-type", "application/json; charset=utf-8"},
+       {"fly-trace-id", "edff7a7d146a11750620d1f0430ff3d0"},
+       {"date", "Thu, 15 Jun 2023 03:54:21 GMT"},
+       {"content-encoding", "gzip"},
+       {"x-envoy-upstream-service-time", "52"},
+       {"server", "Fly/a0b91024 (2023-06-13)"},
+       {"transfer-encoding", "chunked"},
+       {"via", "1.1 fly.io"},
+       {"fly-request-id", "01H2YK18VXHXATNEKR7B2SY0CD-yyz"}
+     ],
+     body: %{"error" => "invalid authentication"},
+     private: %{}
+   }}
+
+response
+|> Map.get(:status)
+```

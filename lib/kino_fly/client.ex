@@ -180,7 +180,11 @@ defmodule KinoFly.Client do
       "Content-Type" => "application/json"
     }
 
-    Req.get("#{hostname}/v1/apps/#{app}/machines", headers: headers)
+    {:ok, response} = Req.get("#{hostname}/v1/apps/#{app}/machines", headers: headers)
+
+    response
+    |> parse_response()
+    # |> IO.inspect(label: "list_machines")
   end
 
   def delete_application() do
@@ -190,4 +194,16 @@ defmodule KinoFly.Client do
   def lease_machine() do
     # Not supported yet
   end
+
+  defp parse_response(%Req.Response{status: 200, body: body}) do
+    IO.puts("Parsed successful response")
+    {:ok, Jason.decode!(body)}
+  end
+
+  defp parse_response(%Req.Response{}) do
+    IO.puts("Parsed error response")
+    {:error, :invalid_response}
+  end
 end
+
+# Failed to serialize widget data, value {:ok, %{__struct__: Req.Response, body: %{"error" => "invalid authentication"}, headers: [{"content-type", "application/json; charset=utf-8"}, {"fly-trace-id", "9b9300e831a213b147063a5de1a8ea4e"}, {"date", "Thu, 15 Jun 2023 03:33:40 GMT"}, {"content-encoding", "gzip"}, {"x-envoy-upstream-service-time", "35"}, {"server", "Fly/a0b91024 (2023-06-13)"}, {"transfer-encoding", "chunked"}, {"via", "1.1 fly.io"}, {"fly-request-id", "01H2YHVCY4WC2VSDJYN64PNWRS-yyz"}], private: %{}, status: 401}} is not JSON-serializable, use another data type
