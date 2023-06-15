@@ -1,3 +1,18 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+.refreshbutton {
+    @apply font-bold py-2 px-4 rounded;
+}
+
+.deploybutton {
+    padding: 8px;
+    background-color: blueviolet;
+    font-size: 0.875rem;
+    border: 2px solid black;
+    border-radius: 0.5rem;
+    color: white;
+    min-width: 130px;
+}

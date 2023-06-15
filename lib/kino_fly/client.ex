@@ -184,6 +184,7 @@ defmodule KinoFly.Client do
 
     response
     |> parse_response()
+
     # |> IO.inspect(label: "list_machines")
   end
 
@@ -195,9 +196,12 @@ defmodule KinoFly.Client do
     # Not supported yet
   end
 
-  defp parse_response(%Req.Response{status: 200, body: body}) do
+  defp parse_response(%Req.Response{status: 200, body: [body]}) do
     IO.puts("Parsed successful response")
-    {:ok, Jason.decode!(body)}
+    IO.inspect(body, label: "BODY")
+    x = {:ok, [body["id"]]}
+    x |> IO.inspect(label: "X")
+    x
   end
 
   defp parse_response(%Req.Response{}) do

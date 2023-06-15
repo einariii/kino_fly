@@ -2,6 +2,8 @@
 .history
 node_modules
 .env
+.metals
+.vscode
 
 # The directory Mix will write compiled artifacts to.
 /_build/

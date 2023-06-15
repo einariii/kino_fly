@@ -30,6 +30,7 @@ defmodule KinoFly do
     IO.inspect(values, label: "VALUESAESUAS")
     [token, application] = values
     result = Client.list_machines(token, application)
+    IO.inspect(result, label: "RESULT")
 
     machines =
       case result do
@@ -37,12 +38,14 @@ defmodule KinoFly do
         {:error, _} -> []
       end
 
-    broadcast_event(ctx, "refresh", %{machines: machines})
+    broadcast_event(ctx, "refresh", machines)
     {:noreply, ctx}
   end
 
   def handle_event("deploy", values, ctx) do
-    machines = Client.create_machine(values["token"], values["machine"], values["application"],[])
+    machines =
+      Client.create_machine(values["token"], values["machine"], values["application"], [])
+
     broadcast_event(ctx, "deploy", %{machines: machines})
     {:noreply, ctx}
   end
