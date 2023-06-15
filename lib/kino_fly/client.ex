@@ -1,11 +1,32 @@
 defmodule KinoFly.Client do
   # https://fly.io/docs/machines/working-with-machines/
 
-  def create_app() do
-    # Not supported yet
+  def create_app(token, org, app, opts \\ []) do
+    # curl -i -X POST \
+    # -H "Authorization: Bearer ${FLY_API_TOKEN}" -H "Content-Type: application/json" \
+    # "${FLY_API_HOSTNAME}/v1/apps" \
+    # -d '{
+    #   "app_name": "user-functions",
+    #   "org_slug": "personal"
+    # }'
+
+    hostname = Keyword.get(opts, :hostname, "https://api.machines.dev")
+
+    headers = %{
+      "Authorization" => "Bearer #{token}",
+      "Content-Type" => "application/json"
+    }
+
+    body =
+      Jason.encode!(%{
+        app_name: app,
+        org_slug: org
+      })
+
+    Req.post("#{hostname}/v1/apps", body: body, headers: headers)
   end
 
-  def get_app_details(app, token, opts \\ []) do
+  def get_app_details(token, app, opts \\ []) do
     # curl -i -X GET \
     # -H "Authorization: Bearer ${FLY_API_TOKEN}" -H "Content-Type: application/json" \
     # "${FLY_API_HOSTNAME}/v1/apps/user-functions"
@@ -20,7 +41,7 @@ defmodule KinoFly.Client do
     Req.get("#{hostname}/v1/apps/#{app}", headers: headers)
   end
 
-  def create_machine(image, name, app, token, opts \\ []) do
+  def create_machine(token, app, name, image, opts \\ []) do
     # curl -i -X POST \
     # -H "Authorization: Bearer ${FLY_API_TOKEN}" -H "Content-Type: application/json" \
     # "${FLY_API_HOSTNAME}/v1/apps/user-functions/machines" \
@@ -72,17 +93,18 @@ defmodule KinoFly.Client do
       "Content-Type" => "application/json"
     }
 
-    body = %{
-      name: name,
-      config: %{
-        image: image
-      }
-    }
+    body =
+      Jason.encode!(%{
+        name: name,
+        config: %{
+          image: image
+        }
+      })
 
     Req.post("#{hostname}/v1/apps/#{app}/machines", body: body, headers: headers)
   end
 
-  def get_machine_details(machine, app, token, opts \\ []) do
+  def get_machine_details(token, app, machine, opts \\ []) do
     # curl -i -X GET \
     # -H "Authorization: Bearer ${FLY_API_TOKEN}" -H "Content-Type: application/json" \
     # "${FLY_API_HOSTNAME}/v1/apps/user-functions/machines/73d8d46dbee589"
@@ -101,7 +123,7 @@ defmodule KinoFly.Client do
     # Not supported yet
   end
 
-  def stop_machine(machine, app, token, opts \\ []) do
+  def stop_machine(token, machine, app, opts \\ []) do
     # curl -i -X POST \
     # -H "Authorization: Bearer ${FLY_API_TOKEN}" -H "Content-Type: application/json" \
     # "${FLY_API_HOSTNAME}/v1/apps/user-functions/machines/73d8d46dbee589/stop"

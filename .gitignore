@@ -1,6 +1,7 @@
 .elixir_ls
 .history
 node_modules
+.env
 
 # The directory Mix will write compiled artifacts to.
 /_build/
