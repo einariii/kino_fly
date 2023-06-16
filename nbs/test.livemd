@@ -11,9 +11,3 @@ Mix.install([{:kino_fly, path: "/kino_fly"}])
 ```elixir
 IO.puts("No source code for this cell.")
 ```
-
-<!-- livebook:{"attrs":{},"chunks":null,"kind":"Elixir.KinoFly","livebook_object":"smart_cell"} -->
-
-```elixir
-IO.puts("No source code for this cell.")
-```

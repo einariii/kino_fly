@@ -7,9 +7,11 @@ defmodule KinoFly do
   @impl true
   def init(attrs, ctx) do
     fields = %{
+      hostname: attrs["hostname"] || "",
       token: attrs["token"] || "",
       application: attrs["application"] || "",
-      machine: attrs["machine"] || ""
+      image: attrs["image"] || "",
+      machines: attrs["machines"] || ""
     }
 
     {:ok, assign(ctx, fields: fields)}
@@ -38,14 +40,14 @@ defmodule KinoFly do
         {:error, _} -> []
       end
 
-    result =
-      Enum.map(machines, fn x ->
-        Client.get_machine_details(token, application, x)
-      end)
+    # result =
+    #   Enum.map(machines, fn x ->
+    #     Client.get_machine_details(token, application, x)
+    #   end)
 
     # IO.inspect(result, label: "RESULT")
 
-    broadcast_event(ctx, "refresh", result)
+    broadcast_event(ctx, "refresh", machines)
     {:noreply, ctx}
   end
 
