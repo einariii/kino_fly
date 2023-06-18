@@ -41,7 +41,7 @@ defmodule KinoFly.Client do
     Req.get("#{hostname}/v1/apps/#{app}", headers: headers)
   end
 
-  def create_machine(token, app, name, image, opts \\ []) do
+  def create_machine(token, app, image, opts \\ []) do
     # curl -i -X POST \
     # -H "Authorization: Bearer ${FLY_API_TOKEN}" -H "Content-Type: application/json" \
     # "${FLY_API_HOSTNAME}/v1/apps/user-functions/machines" \
@@ -95,7 +95,6 @@ defmodule KinoFly.Client do
 
     body =
       Jason.encode!(%{
-        name: name,
         config: %{
           image: image
         }
@@ -188,11 +187,29 @@ defmodule KinoFly.Client do
     }
 
     {:ok, response} = Req.get("#{hostname}/v1/apps/#{app}/machines", headers: headers)
+    response |> IO.inspect(label: "RESPONSE #{DateTime.utc_now()}")
 
-    response
-    |> parse_response()
+    case response do
+      # Body can be individual item or list mpotentially whcih is not handled
+      %Req.Response{status: 200, body: body} ->
+        IO.puts("MATCHED SUCESSSSSSSSSSSSSSSSSSSss")
 
-    # |> IO.inspect(label: "list_machines")
+        info =
+          cond do
+            is_list(body) ->
+              Enum.map(body, fn y ->
+                refresh_extract_fields(y)
+              end)
+
+            true ->
+              refresh_extract_fields(body)
+          end
+
+        {:ok, info}
+
+      _ ->
+        {:error, :invalid_response}
+    end
   end
 
   def delete_application() do
@@ -203,18 +220,13 @@ defmodule KinoFly.Client do
     # Not supported yet
   end
 
-  defp parse_response(%Req.Response{status: 200, body: [body]}) do
-    IO.puts("Parsed successful response")
-    IO.inspect(body, label: "BODY")
-    x = {:ok, [body["id"]]}
-    x |> IO.inspect(label: "X")
-    x
-  end
-
-  defp parse_response(%Req.Response{}) do
-    IO.puts("Parsed error response")
-    {:error, :invalid_response}
+  defp refresh_extract_fields(attrs) do
+    %{
+      "id" => attrs["id"],
+      "name" => attrs["name"],
+      "config" => attrs["config"]["image"],
+      "region" => attrs["region"],
+      "state" => attrs["state"]
+    }
   end
 end
-
-# Failed to serialize widget data, value {:ok, %{__struct__: Req.Response, body: %{"error" => "invalid authentication"}, headers: [{"content-type", "application/json; charset=utf-8"}, {"fly-trace-id", "9b9300e831a213b147063a5de1a8ea4e"}, {"date", "Thu, 15 Jun 2023 03:33:40 GMT"}, {"content-encoding", "gzip"}, {"x-envoy-upstream-service-time", "35"}, {"server", "Fly/a0b91024 (2023-06-13)"}, {"transfer-encoding", "chunked"}, {"via", "1.1 fly.io"}, {"fly-request-id", "01H2YHVCY4WC2VSDJYN64PNWRS-yyz"}], private: %{}, status: 401}} is not JSON-serializable, use another data type

@@ -9,7 +9,7 @@ defmodule KinoFly do
     fields = %{
       hostname: attrs["hostname"] || "",
       token: attrs["token"] || "",
-      application: attrs["application"] || "",
+      app: attrs["app"] || "",
       image: attrs["image"] || "",
       machines: attrs["machines"] || ""
     }
@@ -30,30 +30,22 @@ defmodule KinoFly do
   @impl true
   def handle_event("refresh", values, ctx) do
     IO.inspect(values, label: "VALUESAESUAS")
-    [token, application] = values
-    result = Client.list_machines(token, application)
+    [token, app] = values
+    result = Client.list_machines(token, app)
     IO.inspect(result, label: "RESULT")
 
-    machines =
+    data =
       case result do
-        {:ok, machines} -> machines
-        {:error, _} -> []
+        {:ok, info} -> %{"info" => info, "status" => "ok"}
+        {:error, _} -> %{"info" => [], "status" => "error"}
       end
 
-    # result =
-    #   Enum.map(machines, fn x ->
-    #     Client.get_machine_details(token, application, x)
-    #   end)
-
-    # IO.inspect(result, label: "RESULT")
-
-    broadcast_event(ctx, "refresh", machines)
+    broadcast_event(ctx, "refresh", data)
     {:noreply, ctx}
   end
 
   def handle_event("deploy", values, ctx) do
-    machines =
-      Client.create_machine(values["token"], values["machine"], values["application"], [])
+    machines = Client.create_machine(values["token"], values["app"], values["image"], [])
 
     broadcast_event(ctx, "deploy", %{machines: machines})
     {:noreply, ctx}
