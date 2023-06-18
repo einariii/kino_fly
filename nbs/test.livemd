@@ -1,7 +1,7 @@
 # test
 
 ```elixir
-Mix.install([{:kino_fly, path: "."}])
+Mix.install([{:kino_fly, path: "/kino"}, {:req, "~> 0.3.9"}, {:jason, "~> 1.4"}])
 ```
 
 ## Section
@@ -10,6 +10,10 @@ Mix.install([{:kino_fly, path: "."}])
 
 ```elixir
 IO.puts("No source code for this cell.")
+```
+
+```elixir
+
 ```
 
 ```elixir

@@ -2,10 +2,14 @@
   "scripts": {
     "build:css": "tailwindcss -i ./lib/assets/input.css -o ./lib/assets/output.css --minify",
     "build:css:watch": "tailwindcss -i ./lib/assets/input.css -o ./lib/assets/output.css --minify --watch",
-    "build": "npm run build:css",
-    "build:watch": "npm run build:css:watch"
+    "build:js": "esbuild ./lib/assets/input.js --bundle --outfile=./lib/assets/output.js --minify",
+    "build:js:watch": "esbuild ./lib/assets/input.js --bundle --outfile=./lib/assets/output.js --minify --watch",
+    "build": "npm run build:css && npm run build:js",
+    "build:watch": "concurrently npm:build:*:watch"
   },
   "devDependencies": {
+    "concurrently": "^8.2.0",
+    "esbuild": "^0.18.4",
     "tailwindcss": "^3.3.2"
   },
   "dependencies": {
