@@ -189,27 +189,27 @@ defmodule KinoFly.Client do
     {:ok, response} = Req.get("#{hostname}/v1/apps/#{app}/machines", headers: headers)
     response |> IO.inspect(label: "RESPONSE #{DateTime.utc_now()}")
 
-    # case response do
-    # Body can be individual item or list mpotentially whcih is not handled
-    #   %Req.Response{status: 200, body: body} ->
-    #     IO.puts("MATCHED SUCESSSSSSSSSSSSSSSSSSSss")
+    case response do
+      # Body can be individual item or list mpotentially whcih is not handled
+      %Req.Response{status: 200, body: body} ->
+        IO.puts("MATCHED SUCESSSSSSSSSSSSSSSSSSSss")
 
-    #     info =
-    #       cond do
-    #         is_list(body) ->
-    #           Enum.map(body, fn y ->
-    #             refresh_extract_fields(y)
-    #           end)
+        info =
+          cond do
+            is_list(body) ->
+              Enum.map(body, fn y ->
+                refresh_extract_fields(y)
+              end)
 
-    #         true ->
-    #           refresh_extract_fields(body)
-    #       end
+            true ->
+              refresh_extract_fields(body)
+          end
 
-    #     {:ok, info}
+        {:ok, info}
 
-    #   _ ->
-    #     {:error, :invalid_response}
-    # end
+      _ ->
+        {:error, :invalid_response}
+    end
   end
 
   def delete_application() do

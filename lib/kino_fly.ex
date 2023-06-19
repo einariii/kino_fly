@@ -7,8 +7,8 @@ defmodule KinoFly do
   @impl true
   def init(attrs, ctx) do
     fields = %{
-      hostname: attrs["hostname"] || "",
-      token: attrs["token"] || "",
+      hostname: attrs["hostname"] || "https://api.machines.dev",
+      token: attrs["token"] || System.get_env("FLY_TOKEN") || "",
       app: attrs["app"] || "",
       image: attrs["image"] || "",
       machines: attrs["machines"] || ""

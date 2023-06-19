@@ -1,7 +1,9 @@
 # test
 
 ```elixir
-Mix.install([{:kino_fly, path: "/kino"}, {:req, "~> 0.3.9"}, {:jason, "~> 1.4"}])
+Mix.install([
+  {:kino_fly, path: "."}
+])
 ```
 
 ## Section
@@ -10,10 +12,6 @@ Mix.install([{:kino_fly, path: "/kino"}, {:req, "~> 0.3.9"}, {:jason, "~> 1.4"}]
 
 ```elixir
 IO.puts("No source code for this cell.")
-```
-
-```elixir
-
 ```
 
 ```elixir
@@ -225,5 +223,13 @@ x = [
 ```
 
 ```elixir
-Enum.map(x, fn y -> {y["id"], y["name"], y["config"]["image"], y["region"], y["state"]} end)
+Enum.map(x, fn y ->
+  {
+    y["id"],
+    y["name"],
+    y["config"]["image"],
+    y["region"],
+    y["state"]
+  }
+end)
 ```
