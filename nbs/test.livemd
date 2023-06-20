@@ -2,7 +2,7 @@
 
 ```elixir
 Mix.install([
-  # {:kino_fly, git: "https://github.com/mvkvc/kino_fly.git", ref: "try_vue"}
+  # {:kino_fly, git: "https://github.com/mvkvc/kino_fly.git"}
   {:kino_fly, path: "."}
 ])
 ```
