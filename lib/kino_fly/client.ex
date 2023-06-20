@@ -86,6 +86,7 @@ defmodule KinoFly.Client do
     #   }
     # }'
 
+    region = Keyword.get(opts, :region, nil)
     hostname = Keyword.get(opts, :hostname, "https://api.machines.dev")
 
     headers = %{
@@ -93,13 +94,18 @@ defmodule KinoFly.Client do
       "Content-Type" => "application/json"
     }
 
-    body =
-      Jason.encode!(%{
-        config: %{
-          image: image
-        }
-      })
+    config = %{
+      image: image
+    }
 
+    body =
+      if region do
+        %{region: region, config: config}
+      else
+        %{config: config}
+      end
+
+    body = Jason.encode!(body)
     Req.post("#{hostname}/v1/apps/#{app}/machines", body: body, headers: headers)
   end
 
@@ -125,7 +131,7 @@ defmodule KinoFly.Client do
     %{id: machine, name: name, image: image, region: region}
   end
 
-  def update_machine() do
+  defp update_machine() do
     # Not supported yet
   end
 
@@ -159,7 +165,8 @@ defmodule KinoFly.Client do
     Req.post("#{hostname}/v1/apps/#{app}/machines/#{machine}/start", headers: headers)
   end
 
-  def delete_machine(token, app, machine, opts \\ []) do
+  def delete_machine(token, machine, app, opts \\ []) do
+    force = Keyword.get(opts, :force, false)
     # curl -i -X DELETE \
     # -H "Authorization: Bearer ${FLY_API_TOKEN}" -H "Content-Type: application/json" \
     # "${FLY_API_HOSTNAME}/v1/apps/user-functions/machines/24d896dec64879"
@@ -171,7 +178,10 @@ defmodule KinoFly.Client do
       "Content-Type" => "application/json"
     }
 
-    Req.delete("#{hostname}/v1/apps/#{app}/machines/#{machine}", headers: headers)
+    uri =
+      "#{hostname}/v1/apps/#{app}/machines/#{machine}" <> if force, do: "?force=true", else: ""
+
+    Req.delete(uri, headers: headers)
   end
 
   def list_machines(token, app, opts \\ []) do
@@ -187,13 +197,9 @@ defmodule KinoFly.Client do
     }
 
     {:ok, response} = Req.get("#{hostname}/v1/apps/#{app}/machines", headers: headers)
-    response |> IO.inspect(label: "RESPONSE #{DateTime.utc_now()}")
 
     case response do
-      # Body can be individual item or list mpotentially whcih is not handled
       %Req.Response{status: 200, body: body} ->
-        IO.puts("MATCHED SUCESSSSSSSSSSSSSSSSSSSss")
-
         info =
           cond do
             is_list(body) ->
@@ -212,11 +218,11 @@ defmodule KinoFly.Client do
     end
   end
 
-  def delete_application() do
+  defp delete_application() do
     # Not supported yet
   end
 
-  def lease_machine() do
+  defp lease_machine() do
     # Not supported yet
   end
 
@@ -224,7 +230,7 @@ defmodule KinoFly.Client do
     %{
       "id" => attrs["id"],
       "name" => attrs["name"],
-      "config" => attrs["config"]["image"],
+      "image" => attrs["config"]["image"],
       "region" => attrs["region"],
       "state" => attrs["state"]
     }
